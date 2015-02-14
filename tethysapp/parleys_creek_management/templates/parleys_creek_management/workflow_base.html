@@ -1,0 +1,14 @@
+{% extends "parleys_creek_management/base.html" %}
+
+{% block app_content %}
+{% endblock %}
+
+{% block steps_navigation_items %}
+  <li class="title">New Scenario</li>
+  <li {% if stage == 'scenario' %}class="active"{% endif %}><a href="">1. Choose Climate Scenario</a></li>
+  <li {% if stage == 'general' %}class="active"{% endif %}><a href="">2. Set Reservoir Conditions</a></li>
+  <li {% if stage == 'inflow' %}class="active"{% endif %}><a href="">3. Set Inflow Rate</a></li>
+  <li {% if stage == 'demand' %}class="active"{% endif %}><a href="">4. Set Demand Rates</a></li>
+  <li {% if stage == 'summary' %}class="active"{% endif %}><a href="">5. Review Summary</a></li>
+{% endblock %}
+

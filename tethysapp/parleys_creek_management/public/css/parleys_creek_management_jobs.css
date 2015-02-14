@@ -1,0 +1,54 @@
+/* CSS for the Jobs page */
+
+.progress {
+	margin-bottom: 0;
+	margin-right: 20%;
+}
+
+.pager.jobs-pager .pager-link>a {
+	border-radius: 5px;
+}
+
+.pager.jobs-pager .pager-link>span {
+	border-radius: 5px;
+}
+
+.pager.jobs-pager li.previous>a {
+	margin-left: 20px;
+}
+
+.pager.jobs-pager li.next>a {
+	margin-right: 20px;
+}
+
+.empty-message-container {
+	height:400px;
+	width: 100%;
+}
+
+.empty-message-container .empty-message {
+	font-weight: 300;
+	-webkit-font-smoothing: antialiased;
+}
+
+/* This parent can be any width and height */
+.center-parent {
+  text-align: center;
+}
+ 
+/* The ghost, nudged to maintain perfect centering */
+.center-parent:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+  margin-right: -0.25em; /* Adjusts for spacing */
+}
+
+/* The element to be centered, can
+   also be of any width and height */ 
+.centered {
+  display: inline-block;
+  vertical-align: middle;
+  width: 50%;
+}

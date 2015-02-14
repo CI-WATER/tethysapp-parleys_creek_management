@@ -1,0 +1,198 @@
+{% extends "parleys_creek_management/workflow_base.html" %}
+
+{% load tethys_gizmos %}
+
+{% block app_content %}
+  <form id="input-form" class="form-horizontal" method="post">
+    {% csrf_token %}
+    <h3>Summary{% if scenario_name != '' %} for {{ scenario_name }} {% endif %}</h3>
+
+    <div class="category_separator">General</div>
+
+    <table class="table">
+      <tr>
+        <td>Climate Scenario</td>
+        <td>{{ climate_scenario }}</td>
+      </tr>
+      <tr>
+        <td>Description</td>
+        <td>{% if description %}{{description}}{% else %}<i>No Description</i>{% endif %}</td>
+      </tr>
+    </table>
+
+    <div class="category_separator">Reservoir Characteristics</div>
+
+    <h5 style="margin-left: 5px;">Little Dell</h5>
+    <table class="table">
+      <tr>
+        <td>Capacity</td>
+        <td>{{ general_form_data.capacity_lit }}</td>
+      </tr>
+      <tr>
+        <td>Deadpool</td>
+        <td>{{ general_form_data.deadpool_lit }}</td>
+      </tr>
+      <tr>
+        <td>Initial Volume</td>
+        <td>{{ general_form_data.init_lit }}</td>
+      </tr>
+    </table>
+
+    <h5 style="margin-left: 5px;">Mountain Dell</h5>
+    <table class="table">
+      <tr>
+        <td>Capacity</td>
+        <td>{{ general_form_data.capacity_mt }}</td>
+      </tr>
+      <tr>
+        <td>Deadpool</td>
+        <td>{{ general_form_data.deadpool_mt }}</td>
+      </tr>
+      <tr>
+        <td>Initial Volume</td>
+        <td>{{ general_form_data.init_mt }}</td>
+      </tr>
+    </table>
+
+    {% if sc_number == '1' %}
+      <div class="category_separator">Historical Inflow Multipliers</div>
+
+      <h5 style="margin-left: 5px;">Dell Creek</h5>
+      <table class="table">
+        <tr>
+          <td>January</td>
+          <td>{{ inflow_form_data.dc_jan }}</td>
+          <td>July</td>
+          <td>{{ inflow_form_data.dc_jul }}</td>
+        </tr>
+        <tr>
+          <td>February</td>
+          <td>{{ inflow_form_data.dc_feb }}</td>
+          <td>August</td>
+          <td>{{ inflow_form_data.dc_aug }}</td>
+        </tr>
+        <tr>
+          <td>March</td>
+          <td>{{ inflow_form_data.dc_mar }}</td>
+          <td>September</td>
+          <td>{{ inflow_form_data.dc_sep }}</td>
+        </tr>
+        <tr>
+          <td>April</td>
+          <td>{{ inflow_form_data.dc_apr }}</td>
+          <td>October</td>
+          <td>{{ inflow_form_data.dc_oct }}</td>
+        </tr>
+        <tr>
+          <td>May</td>
+          <td>{{ inflow_form_data.dc_may }}</td>
+          <td>November</td>
+          <td>{{ inflow_form_data.dc_nov }}</td>
+        </tr>
+        <tr>
+          <td>June</td>
+          <td>{{ inflow_form_data.dc_jun }}</td>
+          <td>December</td>
+          <td>{{ inflow_form_data.dc_dec }}</td>
+        </tr>
+      </table>
+
+      <h5 style="margin-left: 5px;">Lambs Creek</h5>
+      <table class="table">
+        <tr>
+          <td>January</td>
+          <td>{{ inflow_form_data.lc_jan }}</td>
+          <td>July</td>
+          <td>{{ inflow_form_data.lc_jul }}</td>
+        </tr>
+        <tr>
+          <td>February</td>
+          <td>{{ inflow_form_data.lc_feb }}</td>
+          <td>August</td>
+          <td>{{ inflow_form_data.lc_aug }}</td>
+        </tr>
+        <tr>
+          <td>March</td>
+          <td>{{ inflow_form_data.lc_mar }}</td>
+          <td>September</td>
+          <td>{{ inflow_form_data.lc_sep }}</td>
+        </tr>
+        <tr>
+          <td>April</td>
+          <td>{{ inflow_form_data.lc_apr }}</td>
+          <td>October</td>
+          <td>{{ inflow_form_data.lc_oct }}</td>
+        </tr>
+        <tr>
+          <td>May</td>
+          <td>{{ inflow_form_data.lc_may }}</td>
+          <td>November</td>
+          <td>{{ inflow_form_data.lc_nov }}</td>
+        </tr>
+        <tr>
+          <td>June</td>
+          <td>{{ inflow_form_data.lc_jun }}</td>
+          <td>December</td>
+          <td>{{ inflow_form_data.lc_dec }}</td>
+        </tr>
+      </table>
+    {% endif %}
+
+    <div class="category_separator">Demand Multipliers</div>
+
+    <table class="table">
+      <tr>
+        <td>January</td>
+        <td>{{ demand_form_data.dem_jan }}</td>
+        <td>July</td>
+        <td>{{ demand_form_data.dem_jul }}</td>
+      </tr>
+      <tr>
+        <td>February</td>
+        <td>{{ demand_form_data.dem_feb }}</td>
+        <td>August</td>
+        <td>{{ demand_form_data.dem_aug }}</td>
+      </tr>
+      <tr>
+        <td>March</td>
+        <td>{{ demand_form_data.dem_mar }}</td>
+        <td>September</td>
+        <td>{{ demand_form_data.dem_sep }}</td>
+      </tr>
+      <tr>
+        <td>April</td>
+        <td>{{ demand_form_data.dem_apr }}</td>
+        <td>October</td>
+        <td>{{ demand_form_data.dem_oct }}</td>
+      </tr>
+      <tr>
+        <td>May</td>
+        <td>{{ demand_form_data.dem_may }}</td>
+        <td>November</td>
+        <td>{{ demand_form_data.dem_nov }}</td>
+      </tr>
+      <tr>
+        <td>June</td>
+        <td>{{ demand_form_data.dem_jun }}</td>
+        <td>December</td>
+        <td>{{ demand_form_data.dem_dec }}</td>
+      </tr>
+    </table>
+  </form>
+  <p class="muted">
+	A summary of this scenario is provided here.
+  </p>
+  <p class="muted">
+      Use the "Clone" button to create a copy of this scenario as a starting
+      point for the next scenario run.
+  </p>
+{% endblock %}
+
+{% block app_actions %}
+  <div class="btn-toolbar actions">
+    {% gizmo "button_group" done_btn %}
+    {% gizmo "button_group" clone_btn %}
+    {% gizmo "button_group" delete_btn %}
+  </div>
+{% endblock %}
+

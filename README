@@ -1,0 +1,28 @@
+To install:
+
+1. run install on setup script:
+
+python setup.py install
+
+2. copy app package ('parleys_creek_management' directory) to 'ckanapp' directory in the Tethys Apps plugin source
+
+3. create a user and database for the app
+
+4. Modify configuration file (app.ini)
+
+Example app.ini:
+
+[database]
+sqlalchemy_url = postgresql://pcmt:pcmt_pass@localhost:5432/pcmt
+
+[dataset]
+ckan_dataset_name = parleys-creek-management-app-datasets
+
+The ckan_dataset_name parameter is optional. It is used to name the dataset in CKAN that is used
+to store the app results. If this parameter is not provided, the default will be used:
+parleys-creek-management-app-datasets. The sqlalchemy_url is required and it needs to point to a
+database that has been initialized using the init_db script that comes with the app.
+
+5. Run init_db.py that is located in the lib directory of the app source code
+
+python init_db.py

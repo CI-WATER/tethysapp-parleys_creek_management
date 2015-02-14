@@ -1,0 +1,119 @@
+/*****************************************
+ * PARLEYS CREEK MANAGEMENT APP STYLESHEET
+ * Author: Nathan Swain
+ * (c) 2013 Brigham Young University
+ * License: BSD-2-Clause
+ *****************************************/
+
+/* Range type Input */
+
+img {
+    max-width: 100%;
+}
+
+#app-content-wrapper.show-nav #app-content #app-actions {
+    min-height: 42px;
+}
+
+#app-header .tethys-app-header .icon-wrapper img {
+    width: 80px;
+}
+
+.category_separator {
+	font-size: 14pt;
+	background-color: #0a62a9;
+	color: white;
+	padding: 10px 10px;
+	margin-bottom: 10px;
+	border-radius: 5px;
+}
+
+.download-btn-container {
+	padding: 15px;
+	margin-top: 10px;
+}
+
+#jobs-table-load {
+	min-width: 5px;
+	min-height: 400px;
+}
+
+.reliability-container {
+	padding: 0 15px;
+	margin-bottom: 10px;
+}
+
+
+.reliability-container h6 {
+	font-size: 11px;
+	font-weight: bold;
+	line-height: 20px;
+	color: #999;
+	text-transform: uppercase;
+}
+
+.reliability-container span {
+	font-size: 40px;
+	font-weight: 200;
+}
+
+.progress.job-percentage {
+	margin-bottom: 0;
+}
+
+/* Page-specific styling for input forms */
+.form-horizontal .control-group {
+    margin-bottom: 30px;
+}
+
+.form-horizontal h3 {
+    margin-bottom: 30px;
+}
+
+.scenario-input-content {
+    margin-bottom: 200px;
+}
+
+.general-input-content h3:nth-of-type(even) {
+    margin-top: 50px;
+}
+
+/* Stages Styling */
+.stage {
+    width: 5%;
+    background: #0A62A9;
+    -webkit-transition: height 5s ease-in;
+    transition: height 5s ease-in;
+}
+
+.stage .stage-number {
+    color: white;
+    display: block;
+    margin: 25%;
+    line-height: 25px;
+    font-size: 200%;
+    font-weight: 300;
+    text-align: center;
+    -webkit-font-smoothing: antialiased;
+}
+
+.stage.before {
+    float: left;
+    border-right: 2px white solid;
+}
+
+.stage.after {
+    float: right;
+    border-left: 2px white solid;
+}
+
+.module-content {
+    width: 72%;
+    float: left;
+}
+
+/* Home page styleing */
+.module-content.home-content {
+	min-height: 500px;
+	width: auto;
+}

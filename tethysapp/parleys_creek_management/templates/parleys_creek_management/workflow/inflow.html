@@ -1,0 +1,44 @@
+{% extends "parleys_creek_management/workflow_base.html" %}
+
+{% load tethys_gizmos %}
+
+{% block app_content %}
+  <form id="input-form" class="form-horizontal" method="post">
+    {% csrf_token %}
+    <!-- Hidden input to identify the form -->
+    <input type="text" name="form" value="inflow" style="display: none;">
+
+    <h3>Dell Creek Historical Inflow Multipliers</h3>
+    <div style="min-height: 250px">
+      {% for slider in mdSliders %}
+        {% gizmo "range_slider" slider %}
+      {% endfor %}
+    </div>
+
+    <h3>Lambs Creek Historical Inflow Multipliers</h3>
+    <div style="min-height: 250px">
+      {% for slider in ldSliders %}
+        {% gizmo "range_slider" slider %}
+      {% endfor %}
+    </div>
+  </form>
+
+  <p class="muted">
+	Dell Creek and Lambs Creek are inflows to the Little Dell and
+	Mountain Dell reservoirs, respectively. Use this page to adjust
+	monthly streamflow rates to test and evaluate possible changes
+	in hydro-climatic conditions in the system.
+  </p>
+  <p class="muted">
+    Define your own estimation of future changes on streamflow based
+    on possible climate variability or streamflow regulations. Select
+    multipliers for each month. These multipliers are applied to the
+    historical average inflow for that month.
+  </p>
+{% endblock %}
+
+{% block app_actions %}
+  {% gizmo "button_group" next_btn %}
+  {% gizmo "button_group" back_btn %}
+  {% gizmo "button_group" cancel_btn %}
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "ckanapp/parleys_creek_management/workflow.html" %}
+
+{% block styles %}
+	{{ super() }}
+	{% resource 'ckanext_apps/css/tethys_snippets.css' %}
+{% endblock %}
+
+{% block breadcrumb_content %}
+  {{ super() }}
+  <li class="active"><a href="#">{{ 'Historical Inflow Multipliers' }}</a></li>
+{% endblock %}
+
+
+{% block form_content %}
+<form class="form-horizontal" method="post">
+  <!-- Hidden input to identify the form -->
+  <input type="text" name="form" value="inflow" style="display: none;">
+  
+  <h3>Dell Creek Historical Inflow Multipliers</h3>
+  <div style="min-height: 250px">
+  {% for slider in c.mdSliders %}
+  {% snippet "snippets/range_slider.html", options=slider %}
+  {% endfor %}
+  </div>
+  
+  <h3>Lambs Creek Historical Inflow Multipliers</h3>
+  <div style="min-height: 250px">
+  {% for slider in c.ldSliders %}
+  {% snippet "snippets/range_slider.html", options=slider %}
+  {% endfor %}
+  </div>
+
+  <div class="form-actions">
+	{% snippet "snippets/button_group.html", options=c.cancel_btn %}
+	{% snippet "snippets/button_group.html", options=c.back_btn %}
+	{% snippet "snippets/button_group.html", options=c.next_btn %}
+  </div>
+</form>
+{% endblock %}
+
+
+{% block help_content %}
+<p class="muted">
+	Dell Creek and Lambs Creek are inflows to the Little Dell and
+	Mountain Dell reservoirs, respectively. Use this page to adjust 
+	monthly streamflow rates to test and evaluate possible changes 
+	in hydro-climatic conditions in the system.
+</p>
+<p class="muted">
+	Define your own estimation of future changes on streamflow based
+	on possible climate variability or streamflow regulations. Select
+	multipliers for each month. These multipliers are applied to the 
+	historical average inflow for that month.
+</p>
+
+{% endblock %}
+
+{% block scripts %}
+	{{ super() }}
+	{% resource 'ckanext_apps/js/tethys_snippets.js' %}
+{% endblock %}	

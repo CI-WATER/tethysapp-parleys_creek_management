@@ -1,0 +1,45 @@
+{% extends "page.html" %}
+
+{% block styles %}
+{{ super() }}
+{% resource 'ckanapp_parleys_creek_management/css/parleys_creek_management.css' %}
+{% endblock %}
+
+{% block breadcrumb_content %}
+  <li><a href="{% url_for 'apps' %}">Apps</a></li>
+  <li><a href="{% url_for 'pcmt-root' %}">{{ 'Parleys Creek Management Tool' }}</a></li>
+{% endblock %}
+
+{% block primary_content %}
+  <div class="module">
+    {% for stage in c.stages.before %}
+      <div class="stage before"><span class="stage-number">{{ stage.number}}</span></div>
+    {% endfor %}
+    <div class="module-content">
+    	{% block form_content %}
+    	{% endblock %}
+    </div>
+    {% for stage in c.stages.after %}
+      <div class="stage after"><span class="stage-number">{{ stage.number }}</span></div>
+    {% endfor %}
+  </div>
+  
+{% endblock %}
+
+{% block secondary_content %}
+  <div class="module module-narrow module-shallow">
+    <h2 class="module-heading">
+      <i class="icon-question-sign"></i>
+      {{ _("Need Help?") }}
+    </h2>
+    <div class="module-content">
+      {% block help_content %}
+      {% endblock %}		
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+	{{ super() }}
+	{% resource 'ckanapp_parleys_creek_management/js/parleys_creek_management.js' %}	
+{% endblock %}

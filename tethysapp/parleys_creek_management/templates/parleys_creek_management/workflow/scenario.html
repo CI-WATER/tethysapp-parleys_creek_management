@@ -1,0 +1,36 @@
+{% extends "parleys_creek_management/workflow_base.html" %}
+
+{% load tethys_gizmos %}
+
+{% block app_content %}
+  <form id="input-form" class="form-horizontal" method="post">
+    {% csrf_token %}
+    <div class="scenario-input-content">
+      <!-- Hidden input to identify the form -->
+      <input type="text" name="form" value="scenario" style="display: none;">
+
+      <h3>New Scenario</h3>
+      {% gizmo "text_input" name_input %}
+      <div class="control-group {% if description_error %}error{% endif %}">
+        <label class="control-label" for="scenario_description">Description</label>
+        <div class="controls">
+            <textarea name="scenario_description" style="resize: none;" rows="3">{{ scenario_description }}</textarea>
+        </div>
+        {% if description_error %}<span class="help-inline">{{ description_error }}</span>{% endif %}
+      </div>
+      {% gizmo "select_input" select_input %}
+    </div>
+  </form>
+  <p class="muted">
+	In this page user can name the modified scenarios in order to submit and
+	send work for simulation. Moreover, predefined extreme climate scenarios
+	are provided here, in order to test the system performance under future
+	projections. If users want to run their own scenarios, it is recommended
+	to use baseline period (historical period).
+  </p>
+{% endblock %}
+
+{% block app_actions %}
+  {% gizmo "button_group" next_btn %}
+  {% gizmo "button_group" cancel_btn %}
+{% endblock %}

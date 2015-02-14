@@ -1,0 +1,40 @@
+{% extends "ckanapp/parleys_creek_management/workflow.html" %}
+
+{% block breadcrumb_content %}
+  {{ super() }}
+  <li class="active"><a href="#">{{ 'General Characteristics' }}</a></li>
+{% endblock %}
+
+
+{% block form_content %}
+<form class="form-horizontal" method="post">
+    <div class="general-input-content">
+      <!-- Hidden input to identify the form -->
+      <input type="text" name="form" value="general" style="display: none;">
+  
+	  <h3>Mountain Dell Reservoir Characteristics</h3>
+	  {% snippet "snippets/text_input.html", options=c.capacity_mt_input %}
+	  {% snippet "snippets/text_input.html", options=c.init_mt_input %}
+	  {% snippet "snippets/text_input.html", options=c.deadpool_mt_input %}
+  
+      <h3>Little Dell Reservoir Characteristics</h3>
+      {% snippet "snippets/text_input.html", options=c.capacity_ld_input %}
+	  {% snippet "snippets/text_input.html", options=c.init_ld_input %}
+	  {% snippet "snippets/text_input.html", options=c.deadpool_ld_input %}
+	</div>
+  <div class="form-actions row">
+	{% snippet "snippets/button_group.html", options=c.cancel_btn %}
+	{% snippet "snippets/button_group.html", options=c.back_btn %}
+	{% snippet "snippets/button_group.html", options=c.next_btn %}
+  </div>
+</form>
+{% endblock %}
+
+
+{% block help_content %}
+<p class="muted">
+	In this page, user can select and modify reservoirs characteristics,
+	to design and test new infrastructure developments. Default values show
+	existing properties of reservoirs.
+</p>
+{% endblock %}		

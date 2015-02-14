@@ -1,0 +1,41 @@
+{% extends "ckanapp/parleys_creek_management/workflow.html" %}
+
+{% block breadcrumb_content %}
+  {{ super() }}
+  <li class="active"><a href="#">{{ 'New Scenario' }}</a></li>
+{% endblock %}
+
+
+{% block form_content %}
+<form class="form-horizontal" method="post">
+  <div class="scenario-input-content">
+      <!-- Hidden input to identify the form -->
+      <input type="text" name="form" value="scenario" style="display: none;">
+      
+      <h3>New Scenario</h3>
+      {% snippet "snippets/text_input.html", options=c.name_input %}
+      <div class="control-group {% if c.description_error %}error{% endif %}">
+      	<label class="control-label" for="scenario_description">Description</label>
+      	<div class="controls">
+      		<textarea name="scenario_description"style="resize: none;" rows="3">{{ c.scenario_description }}</textarea>
+      	</div>
+      	{% if c.description_error %}<span class="help-inline">{{ c.description_error }}</span>{% endif %}
+      </div>
+      {% snippet "snippets/select_input.html", options=c.select_input %}
+  </div>
+  <div class="form-actions">
+	{% snippet "snippets/button_group.html", options=c.cancel_btn %}
+	{% snippet "snippets/button_group.html", options=c.next_btn %}
+  </div>
+</form>
+{% endblock %}
+
+{% block help_content %}
+<p class="muted">
+	In this page user can name the modified scenarios in order to submit and
+	send work for simulation. Moreover, predefined extreme climate scenarios
+	are provided here, in order to test the system performance under future
+	projections. If users want to run their own scenarios, it is recommended
+	to use baseline period (historical period).
+</p>
+{% endblock %}		
