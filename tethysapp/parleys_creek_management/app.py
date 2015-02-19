@@ -46,6 +46,21 @@ class ParleysCreekManagementTool(TethysAppBase):
                     UrlMap(name='workflow_cancel',
                            url='parleys-creek-management/{scenario_id}/cancel',
                            controller='parleys_creek_management.controllers.workflow.cancel_delete'),
+                    UrlMap(name='jobs',
+                           url='parleys-creek-management/jobs',
+                           controller='parleys_creek_management.controllers.jobs.jobs'),
+                    UrlMap(name='jobs_delete',
+                           url='parleys-creek-management/jobs/{scenario_id}/delete',
+                           controller='parleys_creek_management.controllers.jobs.delete'),
+                    UrlMap(name='jobs_status',
+                           url='parleys-creek-management/jobs/{scenario_id}/status',
+                           controller='parleys_creek_management.controllers.jobs.status'),
+                    UrlMap(name='jobs_run',
+                           url='parleys-creek-management/jobs/{scenario_id}/run',
+                           controller='parleys_creek_management.controllers.jobs.run'),
+                    UrlMap(name='results_view',
+                           url='parleys-creek-management/results/{scenario_id}/{plot_name}/view',
+                           controller='parleys_creek_management.controllers.results.view')
         )
 
         return url_maps

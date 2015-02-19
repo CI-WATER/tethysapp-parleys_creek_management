@@ -681,7 +681,7 @@ def summary(request, scenario_id):
     }
 
     done_btn = {'buttons': [{'display_text': 'Done',
-                             # 'href': h.url_for('pcmt-jobs'),
+                             'href': reverse('parleys_creek_management:jobs'),
                              'style': 'success'}]
     }
 
@@ -704,8 +704,7 @@ def summary(request, scenario_id):
 
 def clone(request, scenario_id):
     """
-    Clone the current scenario and redirect to the beginning of
-    the workflow
+    Clone the current scenario and redirect to the beginning of the workflow
     """
     # Get original
     session = SessionMaker()

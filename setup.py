@@ -15,7 +15,7 @@ dependencies = ["owslib", "xlrd", 'sqlalchemy', 'django']
 setup(
     name=release_package,
     version='0.0.1',
-    description='A management tool for the Parleys Creek Watershed Management',
+    description='A management tool for the Parleys Creek Watershed Management.',
     long_description='',
     keywords='',
     author='Nathan Swain, Erfan Goharian',

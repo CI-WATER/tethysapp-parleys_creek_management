@@ -61,8 +61,8 @@ function updateRunButton(id, status) {
 
 function checkStatus(id) {
 	$.ajax({
-		method: "post",
-		url: "jobs/" + id +"/status"
+		method: "get",
+		url: id +"/status"
 	}).done(function(data){
 		// Make sure data has status in it
 		if ('status' in data) {
@@ -86,8 +86,8 @@ function checkStatus(id) {
 
 function submitRunRequest(id) {	
 	$.ajax({
-		method: "post",
-		url: "jobs/" + id + "/run"
+		method: "get",
+		url: id + "/run"
 	});
 	
 	checkStatus(id);

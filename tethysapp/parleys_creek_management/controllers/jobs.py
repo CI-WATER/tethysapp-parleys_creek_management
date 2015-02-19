@@ -3,67 +3,51 @@ from datetime import datetime
 from time import time
 
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.core.urlresolvers import reverse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from xlrd import open_workbook, xldate_as_tuple
 from itertools import izip
 
 from ..model import ManagementScenario, SessionMaker
 from ..model import (LITTLE_DELL_VOLUME,
-                      LITTLE_DELL_RELEASE,
-                      LITTLE_DELL_SPILL,
-                      MOUNTAIN_DELL_VOLUME,
-                      MOUNTAIN_DELL_RELEASE,
-                      MOUNTAIN_DELL_SPILL,
-                      DELL_CREEK_INFLOW,
-                      LAMBS_CREEK_INFLOW,
-                      RELIABILITY)
+                     LITTLE_DELL_RELEASE,
+                     LITTLE_DELL_SPILL,
+                     MOUNTAIN_DELL_VOLUME,
+                     MOUNTAIN_DELL_RELEASE,
+                     MOUNTAIN_DELL_SPILL,
+                     DELL_CREEK_INFLOW,
+                     LAMBS_CREEK_INFLOW,
+                     RELIABILITY)
 
 from ..lib.goldsim import runLittleDellGoldSim
-from ..lib import get_package_name
+from ..lib import get_package_name, CKAN_ENGINE
 
 
 def jobs(request):
     """
     Start a new scenario in the scenario table
     """
-    # Tools
-    t = p.toolkit
-    c = t.c
-
     # Get user id
-    user_id = c.userobj.id
-
-    # Get page number
-    page_number = 1
-
-    if 'page' in t.request.params:
-        page_number = int(t.request.params['page'])
+    user_id = request.user.id
 
     # Get a session
     session = SessionMaker()
-    c.scenarios = session.query(ManagementScenario.id,
-                                ManagementScenario.name,
-                                ManagementScenario.description,
-                                ManagementScenario.last_updated,
-                                ManagementScenario.job_status,
-                                ManagementScenario.percentage,
-                                ManagementScenario.results_link).\
-                          filter(ManagementScenario.user_id == user_id).\
-                          order_by(ManagementScenario.last_updated.desc()).\
-                          all()
+    scenarios_list = session.query(ManagementScenario.id,
+                                   ManagementScenario.name,
+                                   ManagementScenario.description,
+                                   ManagementScenario.last_updated,
+                                   ManagementScenario.job_status,
+                                   ManagementScenario.percentage,
+                                   ManagementScenario.results_link). \
+        filter(ManagementScenario.user_id == str(user_id)). \
+        order_by(ManagementScenario.last_updated.desc()). \
+        all()
 
-    query = session.query(ManagementScenario.id,
-                          ManagementScenario.name,
-                          ManagementScenario.description,
-                          ManagementScenario.last_updated,
-                          ManagementScenario.job_status,
-                          ManagementScenario.percentage,
-                          ManagementScenario.results_link).\
-                    filter(ManagementScenario.user_id == user_id).\
-                    order_by(ManagementScenario.last_updated.desc())
-
-    c.page = Page(query, page_number, items_per_page=10)
+    # Initialize paginator
+    page_number = request.GET.get('page')
+    paginator = Paginator(scenarios_list, 10)
 
     # Define pager format
     pager_format = '''
@@ -73,82 +57,80 @@ def jobs(request):
                      <li><a href="#">1</a></li>
                    </ul>
                    '''
-    c.pager = c.page.pager(format=pager_format)
+    try:
+        # Return the requested page
+        scenarios = paginator.page(page_number)
 
-    context = {}
+    except PageNotAnInteger:
+        # Deliver first page if page is not an integer
+        scenarios = paginator.page(1)
+
+    except EmptyPage:
+        # Deliver last page if page number is out of range
+        scenarios = paginator.page(len(scenarios_list))
+
+    # Template context
+    context = {'scenarios': scenarios,
+               'paginator': paginator,
+               'statuses': ('pending', 'success', 'error'),
+               'nav': 'scenarios'}
+
     return render(request, 'parleys_creek_management/jobs/jobs.html', context)
 
 
-def delete(request):
+def delete(request, scenario_id):
     """
-    Exit the app gracefully on cancel
+    Delete the scenario
     """
-    # Tools
-    t = p.toolkit
-    c = t.c
-
-    # Retrieve the scenarion
+    # Retrieve the scenario
     session = SessionMaker()
-    scenario = session.query(ManagementScenario).filter(ManagementScenario.id == c.id).one()
+    scenario = session.query(ManagementScenario).filter(ManagementScenario.id == scenario_id).one()
 
     # Delete the current scenario
     session.delete(scenario)
     session.commit()
 
-    h.redirect_to('pcmt-jobs')
+    return redirect('parleys_creek_management:jobs')
 
 
-def status(request):
+def status(request, scenario_id):
     """
     Return job status information for a job
     """
-    # Tools
-    t = p.toolkit
-    c = t.c
-
     # Get user id
-    user_id = c.userobj.id
+    user_id = request.user.id
 
     # Get a session
     session = SessionMaker()
-    scenario = session.query(ManagementScenario).get(c.id)
+    scenario = session.query(ManagementScenario).get(scenario_id)
 
     # Defaults
-    status = None
+    job_status = None
     percentage = None
     link = None
 
     if scenario and scenario.user_id == user_id:
-        status = scenario.job_status
+        job_status = scenario.job_status
         percentage = scenario.percentage
-        try:
-            link = t.url_for('pcmt-results-plot', id=c.id, plot_name='little-dell-volume', action='view')
-        except:
-            link = h.url_for('pcmt-results-plot', id=c.id, plot_name='little-dell-volume', action='view')
+        link = reverse('parleys_creek_management:results_view',
+                       kwargs={'scenario_id': scenario_id, 'plot_name': 'little-dell-volume'})
+
+    return JsonResponse({'status': job_status, 'percentage': percentage, 'link': link})
 
 
-    return JsonResponse({'status': status,
-                         'percentage': percentage,
-                         'link': link})
-
-
-def run(request):
+def run(request, scenario_id):
     """
     Run the model action
     """
-    # Tools
-    t = p.toolkit
-    c = t.c
-
     # Get user id
-    user_id = c.userobj.id
+    user_id = str(request.user.id)
 
     # Get a session
     session = SessionMaker()
-    scenario = session.query(ManagementScenario).\
-                       filter(ManagementScenario.user_id == user_id).\
-                       filter(ManagementScenario.id == c.id).\
-                       one()
+    scenario = session.query(ManagementScenario). \
+        filter(ManagementScenario.user_id == user_id). \
+        filter(ManagementScenario.id == scenario_id). \
+        one()
 
     scenario.job_status = 'processing'
     scenario.percentage = 0
@@ -159,7 +141,7 @@ def run(request):
 
     # Get Path to Workspace and unique file name
     workspace_dir = os.path.join(os.path.abspath(os.path.dirname(os.path.dirname(__file__))), 'workspace')
-    unique_file_name = c.userobj.name + datetime.now().strftime('%Y%d%m%H%M%S') + '.xls'
+    unique_file_name = request.user.username + datetime.now().strftime('%Y%d%m%H%M%S') + '.xls'
     out_path = os.path.join(workspace_dir, unique_file_name)
 
     # Update status of scenario in the database to processing
@@ -167,17 +149,17 @@ def run(request):
     session.commit()
 
     # Set timeout to be 10 minutes
-    timeout = time() + 3 * 60 # seconds
-    frequency = 3 # seconds
+    timeout = time() + 3 * 60  # seconds
+    frequency = 3  # seconds
 
     # If timeout occurs, will be marked as error
-    status = 'error'
+    job_status = 'error'
 
     # Start execution
     execution = runLittleDellGoldSim(arguments, out_path)
 
     # Check status until time-out happens
-    while execution.isComplete()==False:
+    while not execution.isComplete():
         if time() >= timeout:
             # kill request
             break
@@ -192,7 +174,7 @@ def run(request):
 
         # Get results
         execution.getOutput(out_path)
-        status = 'success'
+        job_status = 'success'
 
         # Get package name from app.ini
         package_name = get_package_name()
@@ -201,30 +183,22 @@ def run(request):
         # Push file to ckan dataset
         try:
             # Push file to ckan dataset
-            api_endpoint = '/'.join((config['ckan.site_url'],'api'))
-            description = '{0} \<Created by {1} on {2}\>'.format(scenario.description, c.userobj.name, datetime.now().strftime('%B, %d %Y @ %H:%M'))
             resource_name = scenario.name
-
-
-
-            result = append_file_to_package(api_endpoint=api_endpoint,
-                                            context=c,
-                                            package_name=package_name,
-                                            file_path=out_path,
-                                            name=resource_name,
-                                            format='xls',
-                                            model='PCMT-GOLDSIM',
-                                            description=description)
+            description = '{0} \<Created by {1} on {2}\>'.format(scenario.description, request.user.username,
+                                                                 datetime.now().strftime('%B, %d %Y @ %H:%M'))
+            CKAN_ENGINE.create_resource(dataset_id=package_name, file=out_path, name=resource_name,
+                                        format='xls', model='PCMT-GOLDSIM', description=description,
+                                        console=True)
 
         except:
-            status = 'error'
+            job_status = 'error'
 
         # Get link of the resource
         if (result['success']):
             results_link = result['result']['url']
         else:
             results_link = None
-            status = 'error'
+            job_status = 'error'
 
         # Parse results into python data structures and cache in database for visualization
         scenario.job_status = 'processing results'
@@ -232,27 +206,29 @@ def run(request):
         session.commit()
 
         try:
-            parse_results = self.parse_results(out_path)
+            parse_results = parse_results(out_path)
             scenario.set_results(parse_results)
-        except:
-            status = 'error'
+        except Exception as e:
+            print('WARNING: {0}'.format(e.message))
+            job_status = 'error'
 
         # Delete temp file in workspace
         try:
             os.remove(out_path)
-        except:
+        except Exception as e:
+            print('WARNING: {0}'.format(e.message))
             pass
 
         # Update the scenario job status
         scenario.results_link = results_link
 
     # Update status in db
-    scenario.job_status = status
+    scenario.job_status = job_status
     scenario.percentage = 100
     session.commit()
 
     results_link = scenario.results_link
-    return JsonResponse({'status': status, 'link': results_link})
+    return JsonResponse({'status': job_status, 'link': results_link})
 
 
 def parse_results(filename):
@@ -274,13 +250,13 @@ def parse_results(filename):
         sheet = workbook.sheet_by_index(sheet_index)
         sheet_name = sheet.name
 
-        if (sheet_name == 'Little Dell'):
+        if sheet_name == 'Little Dell':
             little_dell = sheet
-        elif (sheet_name == 'Mountain Dell'):
+        elif sheet_name == 'Mountain Dell':
             mountain_dell = sheet
-        elif (sheet_name == 'Lambs and Dell Creeks'):
+        elif sheet_name == 'Lambs and Dell Creeks':
             inflows = sheet
-        elif (sheet_name == 'Reliability'):
+        elif sheet_name == 'Reliability':
             reliability = sheet
 
     ##
@@ -418,7 +394,7 @@ def parse_results(filename):
     # Reliability
     ##
 
-#         results[self.RELIABILITY] = reliability.cell_value(3, 6)
+    # results[self.RELIABILITY] = reliability.cell_value(3, 6)
     results[RELIABILITY] = 1.0
 
     return results
