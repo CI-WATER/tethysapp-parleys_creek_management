@@ -83,7 +83,10 @@ def view(request, scenario_id, plot_name):
                   'height': '500px'}
 
     # Template context
-    context = {'scenario_name': scenario_name,
+    type(scenario_id)
+    context = {'scenario_id': str(scenario_id),
+               'plot_name': plot_name,
+               'scenario_name': scenario_name,
                'results_link': results_link,
                'reliability': reliability,
                'LITTLE_DELL_VOLUME': LITTLE_DELL_VOLUME,
@@ -96,5 +99,7 @@ def view(request, scenario_id, plot_name):
                'LAMBS_CREEK_INFLOW': LAMBS_CREEK_INFLOW,
                'RELIABILITY': RELIABILITY,
                'timeseries': timeseries}
+
+    session.close()
 
     return render(request, 'parleys_creek_management/results/results_viewer.html', context)

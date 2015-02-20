@@ -21,8 +21,12 @@
   <li class="title">App Navigation</li>
   <li {% if nav == 'home' %}class="active"{% endif %}><a href="{% url 'parleys_creek_management:home' %}">Home</a></li>
   <li {% if nav == 'scenarios' %}class="active"{% endif %}><a href="{% url 'parleys_creek_management:jobs' %}">Scenarios</a></li>
-  <li class="separator"></li>
-  <a class="btn btn-success" href="{% url 'parleys_creek_management:workflow_new' %}">New Scenario <span class="glyphicon glyphicon-plus"></span></a>
+
+  {% block new_scenario_override %}
+    <li class="separator"></li>
+    <a class="btn btn-success" href="{% url 'parleys_creek_management:workflow_new' %}">New Scenario</a>
+  {% endblock %}
+
   {% block steps_navigation_items %}
   {% endblock %}
 {% endblock %}

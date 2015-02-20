@@ -7,7 +7,7 @@
     {% csrf_token %}
     <h3>Summary{% if scenario_name != '' %} for {{ scenario_name }} {% endif %}</h3>
 
-    <div class="category_separator">General</div>
+    <div class="category_separator" style="background-color: {{ tethys_app.color|default:'#1b95dc' }};">General</div>
 
     <table class="table">
       <tr>
@@ -20,7 +20,7 @@
       </tr>
     </table>
 
-    <div class="category_separator">Reservoir Characteristics</div>
+    <div class="category_separator" style="background-color: {{ tethys_app.color|default:'#1b95dc' }};">Reservoir Characteristics</div>
 
     <h5 style="margin-left: 5px;">Little Dell</h5>
     <table class="table">
@@ -55,7 +55,7 @@
     </table>
 
     {% if sc_number == '1' %}
-      <div class="category_separator">Historical Inflow Multipliers</div>
+      <div class="category_separator" style="background-color: {{ tethys_app.color|default:'#1b95dc' }};">Historical Inflow Multipliers</div>
 
       <h5 style="margin-left: 5px;">Dell Creek</h5>
       <table class="table">
@@ -138,7 +138,7 @@
       </table>
     {% endif %}
 
-    <div class="category_separator">Demand Multipliers</div>
+    <div class="category_separator" style="background-color: {{ tethys_app.color|default:'#1b95dc' }};">Demand Multipliers</div>
 
     <table class="table">
       <tr>
@@ -179,10 +179,13 @@
       </tr>
     </table>
   </form>
-  <p class="muted">
+{% endblock %}
+
+{% block help_content %}
+  <p class="muted help-text">
 	A summary of this scenario is provided here.
   </p>
-  <p class="muted">
+  <p class="muted help-text">
       Use the "Clone" button to create a copy of this scenario as a starting
       point for the next scenario run.
   </p>

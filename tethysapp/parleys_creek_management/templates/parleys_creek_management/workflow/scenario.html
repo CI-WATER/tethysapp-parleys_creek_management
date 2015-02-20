@@ -11,17 +11,19 @@
 
       <h3>New Scenario</h3>
       {% gizmo "text_input" name_input %}
-      <div class="control-group {% if description_error %}error{% endif %}">
+      <div class="form-group {% if description_error %}has-error{% endif %}">
         <label class="control-label" for="scenario_description">Description</label>
-        <div class="controls">
-            <textarea name="scenario_description" style="resize: none;" rows="3">{{ scenario_description }}</textarea>
-        </div>
-        {% if description_error %}<span class="help-inline">{{ description_error }}</span>{% endif %}
+        <textarea name="scenario_description" class="form-control" style="resize: none;" rows="3">{{ scenario_description }}</textarea>
+        {% if description_error %}<p class="help-block">{{ description_error }}</p>{% endif %}
       </div>
+
       {% gizmo "select_input" select_input %}
     </div>
   </form>
-  <p class="muted">
+{% endblock %}
+
+{% block help_content %}
+  <p class="muted help-text">
 	In this page user can name the modified scenarios in order to submit and
 	send work for simulation. Moreover, predefined extreme climate scenarios
 	are provided here, in order to test the system performance under future

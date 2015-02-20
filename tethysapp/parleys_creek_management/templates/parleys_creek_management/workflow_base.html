@@ -10,5 +10,9 @@
   <li {% if stage == 'inflow' %}class="active"{% endif %}><a href="">3. Set Inflow Rate</a></li>
   <li {% if stage == 'demand' %}class="active"{% endif %}><a href="">4. Set Demand Rates</a></li>
   <li {% if stage == 'summary' %}class="active"{% endif %}><a href="">5. Review Summary</a></li>
+
+  <li class="separator"></li>
+  <li class="title">Tip</li>
+  <li>{% block help_content %}{% endblock %}</li>
 {% endblock %}
 

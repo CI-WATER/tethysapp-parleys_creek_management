@@ -3,6 +3,12 @@
 {% load staticfiles %}
 
 {% block app_content %}
+  <style>
+    .results-btn {
+      background-color: {{ tethys_app.color|default:'#1b95dc' }};
+      border-color: {{ tethys_app.color|default:'#1b95dc' }};
+    }
+  </style>
   <h1>Scenarios</h1>
   {% if paginator.count > 0 %}
     <table class="table table-striped">
@@ -31,8 +37,7 @@
           </td>
           <td class="results" style="vertical-align: middle;">
             {% if scenario.results_link %}
-                {# <a href="{% url 'pcmt-results-plot', scenario_id=scenario.id, plot_name='little-dell-volume', action='view') %}">View Results</a> #}
-                IMPLEMENT LINK HERE
+              <a class='btn btn-success btn-xs results-btn' href="{% url 'parleys_creek_management:results_view' scenario_id=scenario.id plot_name='little-dell-volume' %}">View Results</a>
             {% endif %}
           </td>
           <td style="vertical-align: middle;">

@@ -7,29 +7,36 @@
     {% csrf_token %}
     <!-- Hidden input to identify the form -->
     <input type="text" name="form" value="inflow" style="display: none;">
-
-    <h3>Dell Creek Historical Inflow Multipliers</h3>
-    <div style="min-height: 250px">
-      {% for slider in mdSliders %}
-        {% gizmo "range_slider" slider %}
-      {% endfor %}
-    </div>
-
-    <h3>Lambs Creek Historical Inflow Multipliers</h3>
-    <div style="min-height: 250px">
-      {% for slider in ldSliders %}
-        {% gizmo "range_slider" slider %}
-      {% endfor %}
+    <h3>Historical Inflow Multipliers</h3>
+    <div class="row">
+      <div class="col-md-6">
+        <h3>Dell Creek</h3>
+        <div class="col-reservoir-characteristics" style="min-height: 250px">
+          {% for slider in mdSliders %}
+            {% gizmo "range_slider" slider %}
+          {% endfor %}
+        </div>
+      </div>
+      <div class="col-md-6">
+        <h3>Lambs Creek</h3>
+        <div class="col-reservoir-characteristics" style="min-height: 250px">
+          {% for slider in ldSliders %}
+            {% gizmo "range_slider" slider %}
+          {% endfor %}
+        </div>
+      </div>
     </div>
   </form>
+{% endblock %}
 
-  <p class="muted">
+{% block help_content %}
+  <p class="muted help-text">
 	Dell Creek and Lambs Creek are inflows to the Little Dell and
 	Mountain Dell reservoirs, respectively. Use this page to adjust
 	monthly streamflow rates to test and evaluate possible changes
 	in hydro-climatic conditions in the system.
   </p>
-  <p class="muted">
+  <p class="muted help-text">
     Define your own estimation of future changes on streamflow based
     on possible climate variability or streamflow regulations. Select
     multipliers for each month. These multipliers are applied to the

@@ -11,7 +11,7 @@ class ParleysCreekManagementTool(TethysAppBase):
     icon = 'parleys_creek_management/images/icon.gif'
     package = 'parleys_creek_management'
     root_url = 'parleys-creek-management'
-    color = '#34495e'
+    color = '#915E40'
         
     def url_maps(self):
         """

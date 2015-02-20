@@ -117,3 +117,12 @@ img {
 	min-height: 500px;
 	width: auto;
 }
+
+.help-text {
+    margin: 0 20px;
+    text-align: justify;
+}
+
+.col-reservoir-characteristics {
+    margin: 0 15px;
+}

@@ -5,22 +5,33 @@
 {% block app_content %}
   <form id="input-form" class="form-horizontal" method="post">
     {% csrf_token %}
-    <div class="general-input-content">
+    <h3>Reservoir Characteristics</h3>
+    <div class="general-input-content row">
       <!-- Hidden input to identify the form -->
       <input type="text" name="form" value="general" style="display: none;">
 
-      <h3>Mountain Dell Reservoir Characteristics</h3>
-      {% gizmo "text_input" capacity_mt_input %}
-      {% gizmo "text_input" init_mt_input %}
-      {% gizmo "text_input" deadpool_mt_input %}
-
-      <h3>Little Dell Reservoir Characteristics</h3>
-      {% gizmo "text_input" capacity_ld_input %}
-      {% gizmo "text_input" init_ld_input %}
-      {% gizmo "text_input" deadpool_ld_input %}
+      <div class="col-md-6">
+        <h5>Mountain Dell</h5>
+        <div class="col-reservoir-characteristics">
+          {% gizmo "text_input" capacity_mt_input %}
+          {% gizmo "text_input" init_mt_input %}
+          {% gizmo "text_input" deadpool_mt_input %}
+        </div>
+      </div>
+      <div class="col-md-6">
+        <h5>Little Dell</h5>
+        <div class="col-reservoir-characteristics">
+          {% gizmo "text_input" capacity_ld_input %}
+          {% gizmo "text_input" init_ld_input %}
+          {% gizmo "text_input" deadpool_ld_input %}
+        </div>
+      </div>
     </div>
   </form>
-  <p class="muted">
+{% endblock %}
+
+{% block help_content %}
+  <p class="muted help-text">
       In this page, user can select and modify reservoirs characteristics,
       to design and test new infrastructure developments. Default values show
       existing properties of reservoirs.

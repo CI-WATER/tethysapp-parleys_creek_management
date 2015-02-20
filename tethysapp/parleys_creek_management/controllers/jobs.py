@@ -98,7 +98,7 @@ def status(request, scenario_id):
     Return job status information for a job
     """
     # Get user id
-    user_id = request.user.id
+    user_id = str(request.user.id)
 
     # Get a session
     session = SessionMaker()
@@ -115,7 +115,13 @@ def status(request, scenario_id):
         link = reverse('parleys_creek_management:results_view',
                        kwargs={'scenario_id': scenario_id, 'plot_name': 'little-dell-volume'})
 
-    return JsonResponse({'status': job_status, 'percentage': percentage, 'link': link})
+    # Form response
+    if percentage >= 100:
+        json_response = {'status': job_status, 'percentage': percentage, 'link': link}
+    else:
+        json_response = {'status': job_status, 'percentage': percentage, 'link': None}
+
+    return JsonResponse(json_response)
 
 
 def run(request, scenario_id):
@@ -154,6 +160,7 @@ def run(request, scenario_id):
 
     # If timeout occurs, will be marked as error
     job_status = 'error'
+    error_message = ''
 
     # Start execution
     execution = runLittleDellGoldSim(arguments, out_path)
@@ -186,19 +193,21 @@ def run(request, scenario_id):
             resource_name = scenario.name
             description = '{0} \<Created by {1} on {2}\>'.format(scenario.description, request.user.username,
                                                                  datetime.now().strftime('%B, %d %Y @ %H:%M'))
-            CKAN_ENGINE.create_resource(dataset_id=package_name, file=out_path, name=resource_name,
-                                        format='xls', model='PCMT-GOLDSIM', description=description,
-                                        console=True)
-
-        except:
+            result = CKAN_ENGINE.create_resource(dataset_id=package_name, file=out_path, name=resource_name,
+                                                 format='xls', model='PCMT-GOLDSIM', description=description)
+        except Exception as e:
+            error_message = 'PCMT RUN WARNING: {0}'.format(e.message)
             job_status = 'error'
+            print(error_message)
 
         # Get link of the resource
-        if (result['success']):
+        if result['success']:
             results_link = result['result']['url']
         else:
+            error_message = 'PCMT RUN WARNING: Job execution failed.'
             results_link = None
             job_status = 'error'
+            print(error_message)
 
         # Parse results into python data structures and cache in database for visualization
         scenario.job_status = 'processing results'
@@ -206,18 +215,19 @@ def run(request, scenario_id):
         session.commit()
 
         try:
-            parse_results = parse_results(out_path)
-            scenario.set_results(parse_results)
+            parsed_results = parse_results(out_path)
+            scenario.set_results(parsed_results)
         except Exception as e:
-            print('WARNING: {0}'.format(e.message))
+            error_message = 'PCMT RUN WARNING: {0}'.format(e.message)
             job_status = 'error'
+            print(error_message)
 
         # Delete temp file in workspace
         try:
             os.remove(out_path)
         except Exception as e:
-            print('WARNING: {0}'.format(e.message))
-            pass
+            error_message = 'PCMT RUN WARNING: {0}'.format(e.message)
+            print(error_message)
 
         # Update the scenario job status
         scenario.results_link = results_link
@@ -228,7 +238,16 @@ def run(request, scenario_id):
     session.commit()
 
     results_link = scenario.results_link
-    return JsonResponse({'status': job_status, 'link': results_link})
+
+    # Assemble response object
+    if error_message != '':
+        json_response = {'status': job_status, 'link': results_link}
+    else:
+        json_response = {'status': job_status, 'link': results_link, 'message': error_message}
+
+    session.close()
+
+    return JsonResponse(json_response)
 
 
 def parse_results(filename):

@@ -5,7 +5,7 @@ function updateLink(id, status, link) {
 	
 	if (status === 'success') {
 		// Create a link to browse the results
-		var results_link = '<a href="' + link + '">View Results</a>';
+		var results_link = '<a class="btn btn-success btn-xs results-btn" href="' + link + '">View Results</a>';
 		
 		$(link_selector).html(results_link);
 	} else {
@@ -19,17 +19,18 @@ function updateStatus(id, status, percentage) {
 	status_selector = $('tr#' + id + ' td.status');
 	
 	if (status !== 'error') {
-		if ($('tr#' + id + ' td.status .job-percentage .bar').length === 0) {
+		if ($('tr#' + id + ' td.status .job-percentage .progress-bar').length === 0) {
 			// Replace pending with progress bar
 			var progress_bar;
-			progress_bar = '<div class="job-percentage progress progress-striped active">'
-					 	 +   '<div class="bar" style="width: 0%;"></div>'
-					 	 + '</div>';
+			progress_bar = '<div class="job-percentage progress">'
+                   +   '<div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" style="width: 0%;">'
+                   +   '</div>'
+                   + '</div>';
 			
 			$(status_selector).html(progress_bar);	 	 
 		} else {
 			// Update progress bar percentage
-			$('tr#' + id + ' td.status .job-percentage .bar').css('width', percentage + '%');
+			$('tr#' + id + ' td.status .job-percentage .progress-bar').css('width', percentage + '%');
 		}
 		
 		if (status === 'success') {
@@ -66,6 +67,7 @@ function checkStatus(id) {
 	}).done(function(data){
 		// Make sure data has status in it
 		if ('status' in data) {
+      console.log(data);
 			// Update the status field and run button
 			updateStatus(id, data['status'], data['percentage']);
 			updateRunButton(id, data['status']);
