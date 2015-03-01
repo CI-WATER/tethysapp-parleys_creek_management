@@ -3,25 +3,26 @@
 {% load staticfiles %}
 
 {% block app_content %}
-  <img src="{% static 'parleys_creek_management/images/little_dell_reservoir.jpg' %}">
-      <!-- Title of App -->
-      <h1>Parleys Creek Management Tool</h1>
+{#  <img src="{% static 'parleys_creek_management/images/little_dell_reservoir.jpg' %}">#}
 
-      <!-- Description of tool -->
-      <p>
-      	The Parleys Watershed is one of four drainages that are included in Salt Lake City's
-      	"Protected Watershed" Canyons. Parley's Creek Basin, located on western slope of Wasatch
-      	Mountains, includes two reservoirs, Little Dell and Mountain Dell. The reservoirs were
-      	developed with the primary use of municipal and industrial water supply and secondary use
-      	of flood control. The primary inflows are generated from Lamb's and Dell Creek.
-     </p>
-     <p>
-     	This application can be used to evaluate various management scenarios for the Parley's Creek
-     	system to give this ability to managers, stakeholders, and users to test different alternatives.
-     	This also can be used to test climate change scenarios (uncertain future extreme climate
-     	conditions) to evaluate the reservoirs' performance. Click on the "New Scenario" button to
-     	get started.
-     </p>
+  <img class="parleys-map" src="{% static 'parleys_creek_management/images/Parleys.png' %}">
+
+  <!-- Description of tool -->
+  <p>
+    The Parleys Watershed is one of four drainages that are included in Salt Lake City's
+    "Protected Watershed" Canyons. Parley's Creek Basin, located on western slope of Wasatch
+    Mountains, includes two reservoirs, Little Dell and Mountain Dell. The reservoirs were
+    developed with the primary use of municipal and industrial water supply and secondary use
+    of flood control. The primary inflows are generated from Lamb's and Dell Creek.
+ </p>
+ <p>
+    This application can be used to evaluate various management scenarios for the Parley's Creek
+    system to give this ability to managers, stakeholders, and users to test different alternatives.
+    This also can be used to test climate change scenarios (uncertain future extreme climate
+    conditions) to evaluate the reservoirs' performance. Click on the "New Scenario" button to
+    get started.
+ </p>
+
 {% endblock %}
 
 {% block app_actions %}
