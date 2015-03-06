@@ -13,9 +13,11 @@
   <h3>Results{% if scenario_name %} for {{ scenario_name }} {% endif %}</h3>
 
   {% gizmo "highcharts_plot_view" timeseries %}
+
 {% endblock %}
 
 {% block app_navigation_items %}
+  <li class="title"><h4>Reliability: {{ reliability }}</h4></li>
   {{ block.super }}
 
   {% block new_scenario_override %}

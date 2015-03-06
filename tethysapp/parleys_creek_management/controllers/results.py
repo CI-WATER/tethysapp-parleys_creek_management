@@ -88,7 +88,7 @@ def view(request, scenario_id, plot_name):
                'plot_name': plot_name,
                'scenario_name': scenario_name,
                'results_link': results_link,
-               'reliability': reliability,
+               'reliability': round(reliability, 2),
                'LITTLE_DELL_VOLUME': LITTLE_DELL_VOLUME,
                'LITTLE_DELL_RELEASE': LITTLE_DELL_RELEASE,
                'LITTLE_DELL_SPILL': LITTLE_DELL_SPILL,

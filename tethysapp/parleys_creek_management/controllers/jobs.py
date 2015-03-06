@@ -154,33 +154,19 @@ def run(request, scenario_id):
     scenario.percentage = 25
     session.commit()
 
-    # Set timeout to be 10 minutes
-    timeout = time() + 3 * 60  # seconds
-    frequency = 3  # seconds
-
     # If timeout occurs, will be marked as error
     job_status = 'error'
     error_message = ''
 
     # Start execution
-    execution = runLittleDellGoldSim(arguments, out_path)
+    status_code = runLittleDellGoldSim(arguments, out_path)
 
-    # Check status until time-out happens
-    while not execution.isComplete():
-        if time() >= timeout:
-            # kill request
-            break
-
-        execution.checkStatus(sleepSecs=frequency)
-
-    if execution.isSucceded():
+    if status_code == 200:
         # Update status in db
         scenario.job_status = 'downloading results'
         scenario.percentage = 50
         session.commit()
 
-        # Get results
-        execution.getOutput(out_path)
         job_status = 'success'
 
         # Get package name from app.ini
@@ -201,10 +187,10 @@ def run(request, scenario_id):
             print(error_message)
 
         # Get link of the resource
-        if result['success']:
+        if result and result['success']:
             results_link = result['result']['url']
         else:
-            error_message = 'PCMT RUN WARNING: Job execution failed.'
+            error_message = 'PCMT RUN WARNING: CKAN Upload Failed.'
             results_link = None
             job_status = 'error'
             print(error_message)
@@ -413,7 +399,7 @@ def parse_results(filename):
     # Reliability
     ##
 
-    # results[self.RELIABILITY] = reliability.cell_value(3, 6)
-    results[RELIABILITY] = 1.0
+    results[RELIABILITY] = reliability.cell_value(3, 6)
+    print results[RELIABILITY]
 
     return results

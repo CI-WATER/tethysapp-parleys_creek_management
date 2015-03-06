@@ -10,7 +10,7 @@ app_class = 'parleys_creek_management.app:ParleysCreekManagementTool'
 app_package_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'tethysapp', app_package)
 
 ### Python Dependencies ###
-dependencies = ["owslib", "xlrd", 'sqlalchemy', 'django']
+dependencies = ["requests", "xlrd", 'sqlalchemy', 'django']
 
 setup(
     name=release_package,
