@@ -47,7 +47,7 @@
               {% elif 'error' in scenario.job_status %}
                 <a class="btn btn-xs btn-success run-btn" href="javascript:void(0);" onclick="submitRunRequest({{ scenario.id }});">ReRun</a>
               {% endif %}
-             <a class="btn btn-xs btn-default" href="{% url 'parleys_creek_management:workflow_summary' scenario_id=scenario.id %}">Clone</a>
+             <a class="btn btn-xs btn-default" href="{% url 'parleys_creek_management:workflow_clone' scenario_id=scenario.id %}">Clone</a>
              <a class="btn btn-xs btn-danger" href="{% url 'parleys_creek_management:jobs_delete' scenario_id=scenario.id %}">Delete</a>
             </div>
           </td>

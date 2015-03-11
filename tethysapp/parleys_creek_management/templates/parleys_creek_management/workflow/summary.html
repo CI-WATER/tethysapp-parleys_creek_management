@@ -5,6 +5,11 @@
 {% block app_content %}
   <form id="input-form" class="form-horizontal" method="post">
     {% csrf_token %}
+    <div class="summary-actions">
+      {% gizmo "button_group" delete_btn %}
+      {% gizmo "button_group" clone_btn %}
+      {% gizmo "button_group" done_btn %}
+    </div>
     <h3>Summary{% if scenario_name != '' %} for {{ scenario_name }} {% endif %}</h3>
 
     <div class="category_separator" style="background-color: {{ tethys_app.color|default:'#1b95dc' }};">General</div>

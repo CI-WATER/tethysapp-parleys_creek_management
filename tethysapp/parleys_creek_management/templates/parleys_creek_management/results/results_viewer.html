@@ -10,19 +10,15 @@
       }
   </style>
 
+  <h4 class="reliability">Reliability: {{ reliability }}</h4>
   <h3>Results{% if scenario_name %} for {{ scenario_name }} {% endif %}</h3>
+
 
   {% gizmo "highcharts_plot_view" timeseries %}
 
 {% endblock %}
 
 {% block app_navigation_items %}
-  <li class="title"><h4>Reliability: {{ reliability }}</h4></li>
-  {{ block.super }}
-
-  {% block new_scenario_override %}
-  {% endblock %}
-
   <li class="title">Little Dell Reservoir</li>
     <li {% if plot_name == LITTLE_DELL_VOLUME %}class="active"{% endif %}>
       <a href="{% url 'parleys_creek_management:results_view' scenario_id=scenario_id plot_name=LITTLE_DELL_VOLUME %}">Volume</a>
@@ -55,4 +51,5 @@
 
 {% block app_actions %}
   <a class="btn btn-default" href="{{ results_link }}">Download Results</a>
+  <a class='btn btn-default' href="{% url 'parleys_creek_management:jobs' %}">Back</a>
 {% endblock %}

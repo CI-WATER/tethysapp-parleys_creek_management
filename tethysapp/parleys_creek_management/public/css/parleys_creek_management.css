@@ -126,3 +126,15 @@ img {
 .col-reservoir-characteristics {
     margin: 0 15px;
 }
+
+.reliability {
+    color: #000000;
+    font-size: 25px;
+    font-weight: normal;
+    float: right;
+    padding: 10px;
+}
+
+.summary-actions {
+    float: right;
+}
