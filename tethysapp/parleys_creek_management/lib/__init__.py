@@ -13,7 +13,7 @@ def get_package_name():
     Retrieve the package name that will be used to store results.
     Create it if it doesn't exist.
     """
-    DEFAULT_PACKAGE_NAME = 'parleys-creek-management-app-dataset'
+    DEFAULT_PACKAGE_NAME = 'parleys-creek-management-dataset'
     INVALID_CHARS = '~`!@#$%^&*(){}[]_+=?/\\.,:;><|\'\"\t'
 
     # Context dict
