@@ -70,6 +70,6 @@ class ParleysCreekManagementTool(TethysAppBase):
         Persistent stores
         """
         persistent_stores = (PersistentStore(name='jobs_database',
-                                             initializer='init_stores:init_jobs_database'),)
+                                             initializer='init_stores.init_jobs_database'),)
 
         return persistent_stores

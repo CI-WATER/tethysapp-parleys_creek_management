@@ -10,7 +10,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from xlrd import open_workbook, xldate_as_tuple
 from itertools import izip
 
-from ..model import ManagementScenario, SessionMaker
+from ..model import ManagementScenario, get_session_maker
 from ..model import (LITTLE_DELL_VOLUME,
                      LITTLE_DELL_RELEASE,
                      LITTLE_DELL_SPILL,
@@ -22,7 +22,7 @@ from ..model import (LITTLE_DELL_VOLUME,
                      RELIABILITY)
 
 from ..lib.goldsim import runLittleDellGoldSim
-from ..lib import get_package_name, CKAN_ENGINE
+from ..lib import get_package_name, get_ckan_engine
 
 
 def jobs(request):
@@ -33,6 +33,7 @@ def jobs(request):
     user_id = request.user.id
 
     # Get a session
+    SessionMaker = get_session_maker()
     session = SessionMaker()
     scenarios_list = session.query(ManagementScenario.id,
                                    ManagementScenario.name,
@@ -83,6 +84,7 @@ def delete(request, scenario_id):
     Delete the scenario
     """
     # Retrieve the scenario
+    SessionMaker = get_session_maker()
     session = SessionMaker()
     scenario = session.query(ManagementScenario).filter(ManagementScenario.id == scenario_id).one()
 
@@ -101,6 +103,7 @@ def status(request, scenario_id):
     user_id = str(request.user.id)
 
     # Get a session
+    SessionMaker = get_session_maker()
     session = SessionMaker()
     scenario = session.query(ManagementScenario).get(scenario_id)
 
@@ -132,6 +135,7 @@ def run(request, scenario_id):
     user_id = str(request.user.id)
 
     # Get a session
+    SessionMaker = get_session_maker()
     session = SessionMaker()
     scenario = session.query(ManagementScenario). \
         filter(ManagementScenario.user_id == user_id). \
@@ -193,6 +197,7 @@ def run(request, scenario_id):
             resource_name = scenario.name
             description = '{0} \<Created by {1} on {2}\>'.format(scenario.description, request.user.username,
                                                                  datetime.now().strftime('%B, %d %Y @ %H:%M'))
+            CKAN_ENGINE = get_ckan_engine()
             result = CKAN_ENGINE.create_resource(dataset_id=package_name, file=out_path, name=resource_name,
                                                  format='xls', model='PCMT-GOLDSIM', description=description)
         except Exception as e:

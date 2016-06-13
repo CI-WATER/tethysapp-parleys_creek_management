@@ -2,10 +2,9 @@
 
 import os
 
-from tethys_apps.utilities import get_dataset_engine
-
-
-CKAN_ENGINE = get_dataset_engine('default')
+def get_ckan_engine():
+    from tethys_sdk.services import get_dataset_engine
+    return get_dataset_engine(name='default')
 
 
 def get_package_name():
@@ -29,6 +28,7 @@ def get_package_name():
         package_name = DEFAULT_PACKAGE_NAME
 
     # Check to see if package name already exists
+    CKAN_ENGINE = get_ckan_engine()
     result = CKAN_ENGINE.get_dataset(DEFAULT_PACKAGE_NAME, console=True)
 
     # if package_name not in package_list:

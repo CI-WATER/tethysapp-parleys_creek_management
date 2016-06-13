@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from ..model import SessionMaker, ManagementScenario
+from ..model import get_session_maker, ManagementScenario
 from ..model import (LITTLE_DELL_VOLUME,
                      LITTLE_DELL_RELEASE,
                      LITTLE_DELL_SPILL,
@@ -16,6 +16,7 @@ def view(request, scenario_id, plot_name):
     """
     Default action for results controller
     """
+    SessionMaker = get_session_maker()
     session = SessionMaker()
     scenario = session.query(ManagementScenario.name,
                              ManagementScenario.results_link,

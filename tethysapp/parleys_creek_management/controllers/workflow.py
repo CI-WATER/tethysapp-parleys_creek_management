@@ -3,7 +3,7 @@ from datetime import datetime
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 
-from ..model import SessionMaker, ManagementScenario
+from ..model import get_session_maker, ManagementScenario
 from ..lib import is_number, is_valid_name, is_valid_description
 
 
@@ -24,6 +24,7 @@ def new(request):
     new_scenario = ManagementScenario('Default', request.user.id)
 
     # Commit New Scenario
+    SessionMaker = get_session_maker()
     session = SessionMaker()
     session.add(new_scenario)
     session.commit()
@@ -40,6 +41,7 @@ def scenario(request, scenario_id):
     Controller for the Scenario Selection form
     """
     # Retrieve the scenario
+    SessionMaker = get_session_maker()
     session = SessionMaker()
     a_scenario = session.query(ManagementScenario).filter(ManagementScenario.id == scenario_id).one()
 
@@ -139,6 +141,7 @@ def general(request, scenario_id):
     Controller for the General Characteristics form
     """
     # Retrieve the scenario
+    SessionMaker = get_session_maker()
     session = SessionMaker()
     a_scenario = session.query(ManagementScenario).filter(ManagementScenario.id == scenario_id).one()
 
@@ -311,6 +314,7 @@ def inflow(request, scenario_id):
     Controller for the Monthly Inflow Rate form
     """
     # Retrieve the scenario
+    SessionMaker = get_session_maker()
     session = SessionMaker()
     a_scenario = session.query(ManagementScenario).filter(ManagementScenario.id == scenario_id).one()
 
@@ -651,6 +655,7 @@ def summary(request, scenario_id):
     Controller for the workflow summary page
     """
     # Retrieve the scenario
+    SessionMaker = get_session_maker()
     session = SessionMaker()
     a_scenario = session.query(ManagementScenario).filter(ManagementScenario.id == scenario_id).one()
 
@@ -707,6 +712,7 @@ def clone(request, scenario_id):
     Clone the current scenario and redirect to the beginning of the workflow
     """
     # Get original
+    SessionMaker = get_session_maker()
     session = SessionMaker()
     a_scenario = session.query(ManagementScenario).filter(ManagementScenario.id == scenario_id).one()
 
@@ -725,6 +731,7 @@ def cancel_delete(request, scenario_id):
     Exit the app gracefully on cancel
     """
     # Retrieve the scenario
+    SessionMaker = get_session_maker()
     session = SessionMaker()
     a_scenario = session.query(ManagementScenario).filter(ManagementScenario.id == scenario_id).one()
 

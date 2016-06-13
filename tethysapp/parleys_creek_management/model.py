@@ -8,8 +8,10 @@ from sqlalchemy.orm import sessionmaker
 from utilities import get_persistent_store_engine
 
 # DB Engine, sessionmaker and base
-engine = get_persistent_store_engine('jobs_database')
-SessionMaker = sessionmaker(bind=engine)
+def get_session_maker():
+    engine = get_persistent_store_engine('jobs_database')
+    return sessionmaker(bind=engine)
+
 Base = declarative_base()
 
 LITTLE_DELL_VOLUME = 'little-dell-volume'
@@ -201,6 +203,7 @@ class ManagementScenario(Base):
         """
         Return the appropriate dataset
         """
+        SessionMaker = get_session_maker()
         session = SessionMaker()
         
         if plot_name == LITTLE_DELL_VOLUME:
